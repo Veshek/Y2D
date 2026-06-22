@@ -4,6 +4,10 @@
   "version": "0.1.0",
   "description": "Bulk-transfer videos from Google Drive to YouTube, server-side — no download required.",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy4X7nMDgPzepk+U7zw6POhYB8J5vZBFgDHd4fVsT9WjECD0DIzkM9iORJb4/I6/tNLgqVCVsR64AnuaeQAxnR/Y0roiYaghwYc1nTFm3jGYNfdQ3h6B7fdi/alLUKMWpH9NIgxg/e4UUm0nDcU3wLgMFIzO3oaMTW0lKwcx2wAUnUipUYRtY+dABEw9PTT8urBz5ULjr7QEoP7dmTzgpOzaPDjHRP6s81cuOedew+PCZKg/m8bFdfliIV8C3zo3HGfVUHy56GBC4y3aEYPJ+FvOxkGZt99bSpJR50/9NzrTLBPItSIchxu8oB847MeomUtRvsiKlk4VRlvzo8en3pQIDAQAB",
+  "oauth2": {
+    "client_id": "539912545761-dnak4h59obrha2fvh37v750cmjvb99ma.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/youtube.readonly"]
+  },
   "action": {
     "default_popup": "index.html",
     "default_title": "Y2D"
