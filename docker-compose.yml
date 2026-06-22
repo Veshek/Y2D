@@ -1,0 +1,56 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  # Local stand-in for Google Cloud Tasks. Pre-declares the "transfers" queue so the
+  # backend doesn't have to create it. Dispatches HTTP tasks to the worker.
+  cloud-tasks-emulator:
+    image: ghcr.io/aertje/cloud-tasks-emulator:latest
+    command:
+      - "-host"
+      - "0.0.0.0"
+      - "-port"
+      - "8123"
+      - "-queue"
+      - "projects/clipflow-local/locations/us-central1/queues/transfers"
+    ports:
+      - "8123:8123"
+
+  backend:
+    build: ./backend
+    env_file: .env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      QUEUE_BACKEND: cloud_tasks
+      CLOUD_TASKS_EMULATOR_HOST: cloud-tasks-emulator:8123
+      WORKER_URL: http://worker:8080
+      GCP_PROJECT: clipflow-local
+      GCP_LOCATION: us-central1
+      QUEUE_NAME: transfers
+      OAUTH_REDIRECT_URI: http://localhost:8000/auth/callback
+    ports:
+      - "8000:8080"
+    depends_on:
+      - redis
+      - cloud-tasks-emulator
+
+  worker:
+    build: ./worker
+    env_file: .env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+
+  # Watch-builds the extension into ./extension/dist on the host. Load that folder
+  # as an unpacked extension in Chrome.
+  extension:
+    build: ./extension
+    volumes:
+      - ./extension:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev"]

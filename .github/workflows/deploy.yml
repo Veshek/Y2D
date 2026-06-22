@@ -1,0 +1,53 @@
+name: Deploy
+
+# Build the backend + worker images and deploy both to Cloud Run.
+# Auth uses Workload Identity Federation (no long-lived JSON keys).
+#
+# Required repo settings:
+#   Variables: GCP_PROJECT, GCP_REGION, ARTIFACT_REPO, WIF_PROVIDER, DEPLOY_SA
+#   (WIF_PROVIDER looks like:
+#     projects/123456789/locations/global/workloadIdentityPools/github/providers/github)
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write   # needed for Workload Identity Federation
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [backend, worker]
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.DEPLOY_SA }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev --quiet
+
+      - name: Build and push image
+        run: |
+          IMAGE="${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT }}/${{ vars.ARTIFACT_REPO }}/${{ matrix.service }}:${{ github.sha }}"
+          docker build -t "$IMAGE" ./${{ matrix.service }}
+          docker push "$IMAGE"
+          echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy clipflow-${{ matrix.service }} \
+            --image "$IMAGE" \
+            --region ${{ vars.GCP_REGION }} \
+            --project ${{ vars.GCP_PROJECT }} \
+            --platform managed \
+            ${{ matrix.service == 'backend' && '--allow-unauthenticated' || '--no-allow-unauthenticated' }}

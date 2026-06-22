@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install -r backend/requirements-test.txt
+      - name: Run tests
+        run: cd backend && pytest --tb=short -q
+
+  worker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install -r worker/requirements-test.txt
+      - name: Run tests
+        run: cd worker && pytest --tb=short -q
+
+  extension:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install deps
+        run: cd extension && npm install
+      - name: Run tests
+        run: cd extension && npm test
+      - name: Build
+        run: cd extension && npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: extension-dist
+          path: extension/dist

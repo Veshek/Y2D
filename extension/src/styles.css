@@ -1,0 +1,82 @@
+:root {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  width: 360px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+h1 {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+button {
+  cursor: pointer;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f6f6f6;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+button.link {
+  border: none;
+  background: none;
+  padding: 0;
+  color: #06c;
+  text-decoration: underline;
+}
+
+.privacy {
+  display: block;
+  margin: 12px 0;
+}
+
+.privacy select {
+  margin-left: 8px;
+}
+
+.videos {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.videos li {
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.videos .name {
+  margin-left: 6px;
+}
+
+.status {
+  font-size: 12px;
+  color: #555;
+  margin-left: 22px;
+}
+
+.error {
+  color: #c00;
+}
