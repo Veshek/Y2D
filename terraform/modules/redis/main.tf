@@ -4,13 +4,13 @@ variable "environment" {}
 variable "memory_gb" { default = 1 }
 
 resource "google_redis_instance" "main" {
-  name           = "clipflow-redis-${var.environment}"
+  name           = "y2d-redis-${var.environment}"
   tier           = "BASIC"
   memory_size_gb = var.memory_gb
   region         = var.region
 
   redis_version  = "REDIS_7_0"
-  display_name   = "Clipflow Redis (${var.environment})"
+  display_name   = "Y2D Redis (${var.environment})"
 
   # Enable AUTH for production security
   auth_enabled = true

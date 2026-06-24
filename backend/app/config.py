@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     # for a zero-dependency local run).
     queue_backend: str = "cloud_tasks"
     worker_url: str = "http://worker:8080"
-    gcp_project: str = "clipflow-local"
+    gcp_project: str = "y2d-local"
     gcp_location: str = "us-central1"
     queue_name: str = "transfers"
     # When set, the backend talks to a Cloud Tasks emulator instead of real GCP.

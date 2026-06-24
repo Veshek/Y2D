@@ -14,7 +14,7 @@ from pydantic import BaseModel
 
 from .transfer import run_transfer
 
-app = FastAPI(title="Clipflow Worker")
+app = FastAPI(title="Y2D Worker")
 _pool = ThreadPoolExecutor(max_workers=4)
 
 

@@ -1,4 +1,4 @@
-# Clipflow
+# Y2D
 
 Bulk-transfer videos from Google Drive to YouTube — server-side, so users never
 download-then-reupload large files. A browser extension is the UI; a FastAPI

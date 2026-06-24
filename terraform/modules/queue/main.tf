@@ -5,7 +5,7 @@ variable "worker_url" {}
 variable "invoker_sa" {}
 
 resource "google_cloud_tasks_queue" "transfers" {
-  name     = "clipflow-transfers-${var.environment}"
+  name     = "y2d-transfers-${var.environment}"
   location = var.region
 
   rate_limits {
@@ -30,5 +30,5 @@ resource "google_cloud_tasks_queue" "transfers" {
 
 output "queue_name" { value = google_cloud_tasks_queue.transfers.name }
 output "queue_path" {
-  value = "projects/${var.project_id}/locations/${var.region}/queues/clipflow-transfers-${var.environment}"
+  value = "projects/${var.project_id}/locations/${var.region}/queues/y2d-transfers-${var.environment}"
 }

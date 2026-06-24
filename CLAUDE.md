@@ -1,4 +1,4 @@
-# CLAUDE.md — Clipflow
+# CLAUDE.md — Y2D
 
 Bulk-transfer videos from Google Drive to YouTube, server-side. Browser extension
 (UI) → FastAPI backend (enqueues) → Cloud Tasks (queue) → worker (does the
@@ -103,8 +103,8 @@ terraform/      All GCP infrastructure as code
 
 All monitoring is defined in `terraform/modules/monitoring/main.tf`:
 - **Uptime check** on backend `/healthz` every 60s
-- **Log-based metrics:** `clipflow/transfer_errors` and
-  `clipflow/transfer_completions` — driven by `jsonPayload.status` fields
+- **Log-based metrics:** `y2d/transfer_errors` and
+  `y2d/transfer_completions` — driven by `jsonPayload.status` fields
 - **Alert policies:** backend down, transfer error rate > 5/10min, worker
   5xx > 10%, Redis memory > 80%
 - **Dashboard:** transfer completions, errors, backend p95 latency, Redis memory

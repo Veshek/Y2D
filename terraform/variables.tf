@@ -17,7 +17,7 @@ variable "environment" {
 variable "artifact_repo" {
   description = "Artifact Registry repository name"
   type        = string
-  default     = "clipflow"
+  default     = "y2d"
 }
 
 variable "backend_image" {

@@ -18,7 +18,7 @@ locals {
 
 # --- Backend (public) -------------------------------------------------------
 resource "google_cloud_run_v2_service" "backend" {
-  name     = "clipflow-backend-${var.environment}"
+  name     = "y2d-backend-${var.environment}"
   location = var.region
 
   template {
@@ -99,7 +99,7 @@ resource "google_cloud_run_v2_service_iam_member" "backend_public" {
 
 # --- Worker (private — Cloud Tasks only) ------------------------------------
 resource "google_cloud_run_v2_service" "worker" {
-  name     = "clipflow-worker-${var.environment}"
+  name     = "y2d-worker-${var.environment}"
   location = var.region
 
   template {

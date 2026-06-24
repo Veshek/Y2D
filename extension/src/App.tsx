@@ -74,7 +74,7 @@ export default function App() {
   if (!sessionId) {
     return (
       <div className="app">
-        <h1>Clipflow</h1>
+        <h1>Y2D</h1>
         <p>Move videos from Google Drive to YouTube.</p>
         <p className="hint">Click "▶ YouTube" on any file in Google Drive to queue it.</p>
         <button onClick={handleSignIn}>Connect Google account</button>
@@ -86,7 +86,7 @@ export default function App() {
   return (
     <div className="app">
       <header>
-        <h1>Clipflow</h1>
+        <h1>Y2D</h1>
         <button className="link" onClick={() => signOut().then(() => setSessionId(null))}>
           Sign out
         </button>

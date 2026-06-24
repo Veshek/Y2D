@@ -1,4 +1,4 @@
-"""Clipflow backend API.
+"""Y2D backend API.
 
 Responsibilities:
   * Run the Google OAuth dance server-side and hand the extension a session_id.
@@ -26,7 +26,7 @@ from .config import get_settings
 from .models import CreateTransfersRequest
 
 settings = get_settings()
-app = FastAPI(title="Clipflow API")
+app = FastAPI(title="Y2D API")
 
 # The extension's popup is a chrome-extension:// origin. Allowing all origins keeps
 # local dev simple; lock this down to your extension id for production.

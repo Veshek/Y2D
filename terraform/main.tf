@@ -35,17 +35,17 @@ resource "google_project_service" "apis" {
 }
 
 # --- Artifact Registry ------------------------------------------------------
-resource "google_artifact_registry_repository" "clipflow" {
+resource "google_artifact_registry_repository" "y2d" {
   repository_id = var.artifact_repo
   format        = "DOCKER"
   location      = var.region
-  description   = "Clipflow container images"
+  description   = "Y2D container images"
   depends_on    = [google_project_service.apis]
 }
 
 # --- Secrets ----------------------------------------------------------------
 resource "google_secret_manager_secret" "google_client_id" {
-  secret_id = "clipflow-google-client-id-${var.environment}"
+  secret_id = "y2d-google-client-id-${var.environment}"
   replication { auto {} }
   depends_on = [google_project_service.apis]
 }
@@ -56,7 +56,7 @@ resource "google_secret_manager_secret_version" "google_client_id" {
 }
 
 resource "google_secret_manager_secret" "google_client_secret" {
-  secret_id = "clipflow-google-client-secret-${var.environment}"
+  secret_id = "y2d-google-client-secret-${var.environment}"
   replication { auto {} }
   depends_on = [google_project_service.apis]
 }
@@ -68,19 +68,19 @@ resource "google_secret_manager_secret_version" "google_client_secret" {
 
 # --- Service accounts -------------------------------------------------------
 resource "google_service_account" "backend" {
-  account_id   = "clipflow-backend-${var.environment}"
-  display_name = "Clipflow Backend (${var.environment})"
+  account_id   = "y2d-backend-${var.environment}"
+  display_name = "Y2D Backend (${var.environment})"
 }
 
 resource "google_service_account" "worker" {
-  account_id   = "clipflow-worker-${var.environment}"
-  display_name = "Clipflow Worker (${var.environment})"
+  account_id   = "y2d-worker-${var.environment}"
+  display_name = "Y2D Worker (${var.environment})"
 }
 
 # SA that Cloud Tasks uses to call the private worker
 resource "google_service_account" "tasks_invoker" {
-  account_id   = "clipflow-tasks-invoker-${var.environment}"
-  display_name = "Clipflow Tasks Invoker (${var.environment})"
+  account_id   = "y2d-tasks-invoker-${var.environment}"
+  display_name = "Y2D Tasks Invoker (${var.environment})"
 }
 
 # --- Modules ----------------------------------------------------------------
@@ -126,8 +126,8 @@ module "monitoring" {
   project_id    = var.project_id
   environment   = var.environment
   alert_email   = var.alert_email
-  backend_service_name = "clipflow-backend-${var.environment}"
-  worker_service_name  = "clipflow-worker-${var.environment}"
+  backend_service_name = "y2d-backend-${var.environment}"
+  worker_service_name  = "y2d-worker-${var.environment}"
   queue_name           = module.queue.queue_name
   depends_on    = [google_project_service.apis]
 }
@@ -149,7 +149,7 @@ resource "google_secret_manager_secret_iam_member" "backend_client_secret" {
 resource "google_cloud_run_v2_service_iam_member" "tasks_invoker" {
   project  = var.project_id
   location = var.region
-  name     = "clipflow-worker-${var.environment}"
+  name     = "y2d-worker-${var.environment}"
   role     = "roles/run.invoker"
   member   = "serviceAccount:${google_service_account.tasks_invoker.email}"
   depends_on = [module.cloud_run]

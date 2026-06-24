@@ -16,14 +16,14 @@
  *   - The MIME type indicator if we add video-only filtering
  */
 
-const BUTTON_ATTR = "data-clipflow-injected";
-const BUTTON_CLASS = "clipflow-yt-btn";
+const BUTTON_ATTR = "data-y2d-injected";
+const BUTTON_CLASS = "y2d-yt-btn";
 
 /** Inject a stylesheet once so buttons look consistent. */
 function injectStyles() {
-  if (document.getElementById("clipflow-styles")) return;
+  if (document.getElementById("y2d-styles")) return;
   const style = document.createElement("style");
-  style.id = "clipflow-styles";
+  style.id = "y2d-styles";
   style.textContent = `
     .${BUTTON_CLASS} {
       display: inline-flex;
@@ -49,7 +49,7 @@ function injectStyles() {
     .${BUTTON_CLASS}:active {
       background: #f5c6c2;
     }
-    .${BUTTON_CLASS}.clipflow-queued {
+    .${BUTTON_CLASS}.y2d-queued {
       border-color: #188038;
       color: #188038;
       cursor: default;
@@ -89,7 +89,7 @@ function queueFile(fileId: string, fileName: string, btn: HTMLButtonElement) {
     { type: "QUEUE_FILE", fileId, fileName },
     () => {
       btn.textContent = "✓ Queued";
-      btn.classList.add("clipflow-queued");
+      btn.classList.add("y2d-queued");
       btn.disabled = true;
     },
   );
@@ -106,7 +106,7 @@ function injectButton(row: Element) {
   const btn = document.createElement("button");
   btn.className = BUTTON_CLASS;
   btn.textContent = "▶ YouTube";
-  btn.title = "Upload to YouTube via Clipflow";
+  btn.title = "Upload to YouTube via Y2D";
 
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -127,7 +127,7 @@ function injectButton(row: Element) {
 /** Scan the DOM for all file rows and inject buttons. */
 function injectAll() {
   // Drive renders file rows with a [data-id] attribute in both list and grid views.
-  const rows = document.querySelectorAll("[data-id]:not([data-clipflow-injected])");
+  const rows = document.querySelectorAll("[data-id]:not([data-y2d-injected])");
   rows.forEach(injectButton);
 }
 

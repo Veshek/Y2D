@@ -7,7 +7,7 @@ variable "queue_name" {}
 
 # --- Notification channel (email) -------------------------------------------
 resource "google_monitoring_notification_channel" "email" {
-  display_name = "Clipflow Alerts (${var.environment})"
+  display_name = "Y2D Alerts (${var.environment})"
   type         = "email"
   labels = {
     email_address = var.alert_email
@@ -16,7 +16,7 @@ resource "google_monitoring_notification_channel" "email" {
 
 # --- Uptime checks ----------------------------------------------------------
 resource "google_monitoring_uptime_check_config" "backend" {
-  display_name = "Clipflow backend healthz (${var.environment})"
+  display_name = "Y2D backend healthz (${var.environment})"
   timeout      = "10s"
   period       = "60s"
 
@@ -38,7 +38,7 @@ resource "google_monitoring_uptime_check_config" "backend" {
 
 # --- Log-based metric: transfer failures ------------------------------------
 resource "google_logging_metric" "transfer_errors" {
-  name        = "clipflow/transfer_errors_${var.environment}"
+  name        = "y2d/transfer_errors_${var.environment}"
   description = "Worker transfer failures — status=error in worker logs"
   filter      = <<-EOT
     resource.type="cloud_run_revision"
@@ -64,7 +64,7 @@ resource "google_logging_metric" "transfer_errors" {
 
 # --- Log-based metric: transfer completions ---------------------------------
 resource "google_logging_metric" "transfer_completions" {
-  name        = "clipflow/transfer_completions_${var.environment}"
+  name        = "y2d/transfer_completions_${var.environment}"
   description = "Successful transfer completions"
   filter      = <<-EOT
     resource.type="cloud_run_revision"
@@ -111,7 +111,7 @@ resource "google_monitoring_alert_policy" "transfer_error_rate" {
   conditions {
     display_name = "Transfer errors > 5 in 10 minutes"
     condition_threshold {
-      filter     = "metric.type=\"logging.googleapis.com/user/clipflow/transfer_errors_${var.environment}\""
+      filter     = "metric.type=\"logging.googleapis.com/user/y2d/transfer_errors_${var.environment}\""
       duration   = "0s"
       comparison = "COMPARISON_GT"
       threshold_value = 5
@@ -182,9 +182,9 @@ resource "google_monitoring_alert_policy" "redis_memory" {
 }
 
 # --- Dashboard --------------------------------------------------------------
-resource "google_monitoring_dashboard" "clipflow" {
+resource "google_monitoring_dashboard" "y2d" {
   dashboard_json = jsonencode({
-    displayName = "Clipflow (${var.environment})"
+    displayName = "Y2D (${var.environment})"
     gridLayout = {
       columns = 2
       widgets = [
@@ -194,7 +194,7 @@ resource "google_monitoring_dashboard" "clipflow" {
             dataSets = [{
               timeSeriesQuery = {
                 timeSeriesFilter = {
-                  filter = "metric.type=\"logging.googleapis.com/user/clipflow/transfer_completions_${var.environment}\""
+                  filter = "metric.type=\"logging.googleapis.com/user/y2d/transfer_completions_${var.environment}\""
                   aggregation = {
                     alignmentPeriod  = "3600s"
                     perSeriesAligner = "ALIGN_DELTA"
@@ -210,7 +210,7 @@ resource "google_monitoring_dashboard" "clipflow" {
             dataSets = [{
               timeSeriesQuery = {
                 timeSeriesFilter = {
-                  filter = "metric.type=\"logging.googleapis.com/user/clipflow/transfer_errors_${var.environment}\""
+                  filter = "metric.type=\"logging.googleapis.com/user/y2d/transfer_errors_${var.environment}\""
                   aggregation = {
                     alignmentPeriod  = "3600s"
                     perSeriesAligner = "ALIGN_DELTA"

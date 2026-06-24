@@ -1,4 +1,4 @@
-// Thin client for the Clipflow backend. The session_id authenticates every call
+// Thin client for the Y2D backend. The session_id authenticates every call
 // via the X-Session-Id header.
 
 const BACKEND = "http://localhost:8000";
