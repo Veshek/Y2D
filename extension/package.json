@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite build --watch",
+    "dev": "vite build --watch & cross-env VITE_BUILD_ENTRY=content vite build --watch & cross-env VITE_BUILD_ENTRY=background vite build --watch",
     "build": "vite build && cross-env VITE_BUILD_ENTRY=content vite build && cross-env VITE_BUILD_ENTRY=background vite build",
     "preview": "vite preview",
     "test": "vitest run",
