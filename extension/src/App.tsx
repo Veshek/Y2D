@@ -7,11 +7,28 @@ import {
 import { getSession, signIn, signOut } from "./auth";
 import type { QueuedFile } from "./background";
 
+
 interface Progress {
   status: string;
   progress: number;
   youtube_video_id?: string;
   error?: string;
+}
+
+function NotOnDrive() {
+  return (
+    <div className="not-drive">
+      <div className="not-drive-icon">📁</div>
+      <p className="not-drive-title">Open Google Drive to use Y2D</p>
+      <p className="not-drive-hint">
+        Navigate to{" "}
+        <a href="https://drive.google.com" target="_blank" rel="noreferrer">
+          drive.google.com
+        </a>{" "}
+        and click the extension again.
+      </p>
+    </div>
+  );
 }
 
 export default function App() {
@@ -20,6 +37,21 @@ export default function App() {
   const [privacy, setPrivacy] = useState<Privacy>("private");
   const [progress, setProgress] = useState<Record<string, Progress>>({});
   const [error, setError] = useState<string | null>(null);
+  const [onDrive, setOnDrive] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+      setOnDrive(!!tab?.url?.includes("drive.google.com"));
+    });
+
+    const listener = (msg: { type: string; url?: string }) => {
+      if (msg.type === "TAB_CHANGED") {
+        setOnDrive(!!msg.url?.includes("drive.google.com"));
+      }
+    };
+    chrome.runtime.onMessage.addListener(listener);
+    return () => chrome.runtime.onMessage.removeListener(listener);
+  }, []);
 
   // Restore session on popup open.
   useEffect(() => {
@@ -71,10 +103,15 @@ export default function App() {
     chrome.storage.local.set({ queuedFiles: updated });
   }
 
+  if (onDrive === null) return null;
+  if (!onDrive) return <NotOnDrive />;
+
   if (!sessionId) {
     return (
       <div className="app">
-        <h1>Y2D</h1>
+        <header>
+          <h1>Y2D</h1>
+        </header>
         <p>Move videos from Google Drive to YouTube.</p>
         <p className="hint">Click "▶ YouTube" on any file in Google Drive to queue it.</p>
         <button onClick={handleSignIn}>Connect Google account</button>

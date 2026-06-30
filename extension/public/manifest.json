@@ -9,8 +9,10 @@
     "scopes": ["https://www.googleapis.com/auth/youtube.readonly"]
   },
   "action": {
-    "default_popup": "index.html",
     "default_title": "Y2D"
+  },
+  "side_panel": {
+    "default_path": "index.html"
   },
   "background": {
     "service_worker": "background.js"
@@ -22,7 +24,7 @@
       "run_at": "document_idle"
     }
   ],
-  "permissions": ["identity", "storage"],
+  "permissions": ["identity", "storage", "tabs", "activeTab", "sidePanel"],
   "host_permissions": [
     "http://localhost:8000/*",
     "https://drive.google.com/*"
