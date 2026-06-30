@@ -45,10 +45,9 @@ async def test_process_defaults_privacy_to_private(client):
             "file_id": "f-1",
         })
     assert resp.status_code == 200
-    _, kwargs = mock_submit.call_args
-    # The 5th positional arg to run_transfer is privacy
     args = mock_submit.call_args[0]
-    assert args[4] == "private"
+    # args: (run_transfer, transfer_id, session_id, file_id, title, privacy)
+    assert args[5] == "private"
 
 
 async def test_process_rejects_missing_fields(client):
