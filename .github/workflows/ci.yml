@@ -1,3 +1,4 @@
+# Runs on every push and PR to validate backend, worker, and extension.
 name: CI
 
 on:
